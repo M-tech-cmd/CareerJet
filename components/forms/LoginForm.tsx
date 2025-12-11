@@ -266,10 +266,10 @@ const Google = (props: SVGProps<SVGSVGElement>) => (
 
 
 export async function LoginForm() {
-  const session = await auth();
-  if (session?.user) {
-    redirect("/");
-  }
+    const session = await auth();
+    if (session?.user) {
+        redirect("/");
+    }
 
     return (
         <div className="flex flex-col gap-6">
@@ -299,7 +299,14 @@ export async function LoginForm() {
                                 />
                             </form>
 
-                            <form>
+                            <form
+                                action={async () => {
+                                    "use server";
+                                    await signIn("google", {
+                                        redirectTo: "/",
+                                    });
+                                }}
+                            >
                                 <GeneralSubmitButtons
                                     text="Login with Google"
                                     width="w-full"
