@@ -7,60 +7,46 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-
+  id                  String     @id @default(cuid())
+  name                String?
+  email               String     @unique
+  emailVerified       DateTime?
+  image               String?
   userType            UserType?
-  onboardingCompleted Boolean   @default(false)
-
-  Company   Company?
-  JobSeeker JobSeeker?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-enum UserType {
-  COMPANY
-  JOB_SEEKER
+  onboardingCompleted Boolean    @default(false)
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  accounts            Account[]
+  Company             Company?
+  JobSeeker           JobSeeker?
+  sessions            Session[]
 }
 
 model Company {
-  id String @id @default(uuid())
-
-  name     String
-  location String
-  about    String
-  logo     String
-  website  String
-  xAccount String?
-
-  user      User      @relation(fields: [userId], references: [id])
+  id        String    @id @default(uuid())
+  name      String
+  location  String
+  about     String
+  logo      String
+  website   String
+  xAccount  String?
   userId    String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Account   Account[]
-
-  JobPost JobPost[]
+  user      User      @relation(fields: [userId], references: [id])
+  JobPost   JobPost[]
 }
 
 model JobSeeker {
-  id String @id @default(uuid())
-
-  name   String
-  about  String
-  resume String
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
-
+  id        String   @id @default(uuid())
+  name      String
+  about     String
+  resume    String
+  userId    String   @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 model Account {
@@ -75,14 +61,11 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  Company   Company? @relation(fields: [companyId], references: [id])
-  companyId String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  companyId         String?
+  Company           Company? @relation(fields: [companyId], references: [id])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -91,10 +74,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -106,8 +88,7 @@ model VerificationToken {
 }
 
 model JobPost {
-  id String @id @default(uuid())
-
+  id              String        @id @default(uuid())
   jobTitle        String
   employmentType  String
   location        String
@@ -116,14 +97,16 @@ model JobPost {
   jobDescription  String
   listingDuration Int
   benefits        String[]
+  status          JobPostStatus @default(DRAFT)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  companyId       String
+  Company         Company       @relation(fields: [companyId], references: [id])
+}
 
-  status JobPostStatus @default(DRAFT)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Company   Company @relation(fields: [companyId], references: [id])
-  companyId String
+enum UserType {
+  COMPANY
+  JOB_SEEKER
 }
 
 enum JobPostStatus {
