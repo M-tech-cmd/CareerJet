@@ -5,8 +5,8 @@ import { useState } from "react";
 import Logo from "@/public/logo.png";
 import { UserTypeSelection } from "./UserTypeForm";
 import CompanyForm from "./CompanyForm";
-import { UserType } from "@prisma/client";
 import { JobSeekerForm } from "./JobSeekerForm";
+import { UserType } from "@/types";
 
 export function OnboardingForm() {
   const [step, setStep] = useState(1);
@@ -29,7 +29,7 @@ export function OnboardingForm() {
   return (
     <>
       <div className="flex items-center gap-3 mb-10">
-        <Image src={Logo} alt="Logo" width={50} height={50} />
+        <Image src={Logo} alt="JobMarshal Logo" width={50} height={50} />
         <span className="text-4xl font-bold">
           Career<span className="text-primary">Jet</span>
         </span>
@@ -40,3 +40,4 @@ export function OnboardingForm() {
     </>
   );
 }
+

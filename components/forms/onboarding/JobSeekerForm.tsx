@@ -18,7 +18,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import pdfImage from "@/public/pdf.png";
-import { createJobSeeker } from "@/action";
+import { createJobSeeker } from "@/app/action";
 export function JobSeekerForm() {
   const [pending, setPending] = useState<boolean>(false);
   const form = useForm<z.infer<typeof jobSeekerSchema>>({

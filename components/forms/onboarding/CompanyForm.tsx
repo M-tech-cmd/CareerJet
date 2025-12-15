@@ -1,5 +1,5 @@
 "use client";
-import { createCompany } from '@/action';
+import { createCompany } from '@/app/action';
 import { countryList } from '@/app/utils/countriesList';
 import { companySchema } from '@/app/utils/zodSchemas';
 import { UploadDropzone } from '@/components/general/UploadThingReExport';
