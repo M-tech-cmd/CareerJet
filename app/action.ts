@@ -9,6 +9,8 @@ import arcjet, { detectBot, shield } from "./utils/arcjet";
 import { request } from "@arcjet/next";
 import { stripe } from "./utils/stripe";
 import { jobListingDurationPricing } from "./utils/pricingTiers";
+import { inngest } from "./utils/inngest/client";
+import { revalidatePath } from "next/cache";
 
 const aj = arcjet
   .withRule(
@@ -19,124 +21,80 @@ const aj = arcjet
   .withRule(
     detectBot({
       mode: "LIVE",
-      // Allow good bots (search engines, monitoring, etc.)
-      allow: [
-        "GOOGLE_CRAWLER",           // Google Search
-        "GOOGLE_ADSBOT",            // Google Ads
-        "GOOGLE_ADSBOT_MOBILE",     // Google Ads Mobile
-        "BING_CRAWLER",             // Bing Search
-        "DISCORD_CRAWLER",          // Discord link previews
-        "FACEBOOK_CRAWLER",         // Facebook link previews
-        "TWITTER_CRAWLER",          // Twitter/X link previews
-        "SLACK_CRAWLER",            // Slack link previews
-        "LINKEDIN_CRAWLER",         // LinkedIn link previews
-        "WHATSAPP_CRAWLER",         // WhatsApp link previews
-      ],
-      // These are automatically blocked (bad bots):
-      // - Automated scrapers
-      // - Content thieves
-      // - Vulnerability scanners
-      // - Malicious bots
-      // - AI scrapers (GPTBot, ClaudeBot, etc.)
+      allow: [],
     })
   );
 
 export async function createCompany(data: z.infer<typeof companySchema>) {
-  try {
-    // Getting the user from the session
-    const user = await requireUser();
-
-    // Creating a request object from arcjet
-    const req = await request();
-    const decision = await aj.protect(req);
-    
-    if (decision.isDenied()) {
-      if (decision.reason.isBot()) {
-        throw new Error("Bot detected");
-      }
-      throw new Error("Forbidden");
-    }
-
-    const validatedData = companySchema.parse(data);
-
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        onboardingCompleted: true,
-        userType: "COMPANY",
-        Company: {
-          create: {
-            ...validatedData,
-          },
-        },
-      },
-    });
-
-    if (!updatedUser) {
-      throw new Error("Failed to update user");
-    }
-  } catch (error) {
-    console.error("Create company error:", error);
-    throw error;
-  }
-
-  return redirect("/");
-}
-
-export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
-  try {
-    const user = await requireUser();
-
-    // Creating a request object from arcjet
-    const req = await request();
-    const decision = await aj.protect(req);
-    
-    if (decision.isDenied()) {
-      if (decision.reason.isBot()) {
-        throw new Error("Bot detected");
-      }
-      throw new Error("Forbidden");
-    }
-
-    const validatedData = jobSeekerSchema.parse(data);
-
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        onboardingCompleted: true,
-        userType: "JOB_SEEKER",
-        JobSeeker: {
-          create: {
-            ...validatedData,
-          },
-        },
-      },
-    });
-  } catch (error) {
-    console.error("Create job seeker error:", error);
-    throw error;
-  }
-
-  return redirect("/");
-}
-
-export async function createJob(data: z.infer<typeof jobSchema>) {
   const user = await requireUser();
 
-  // Creating a request object from arcjet
+  // Access the request object so Arcjet can analyze it
   const req = await request();
+  // Call Arcjet protect
   const decision = await aj.protect(req);
 
   if (decision.isDenied()) {
-    if (decision.reason.isBot()) {
-      throw new Error("Bot detected");
-    }
     throw new Error("Forbidden");
   }
+
+
+    // Server-side validation
+      const validatedData = companySchema.parse(data);
+    
+      console.log(validatedData);
+    
+      await prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          onboardingCompleted: true,
+          userType: "COMPANY",
+          Company: {
+            create: {
+              ...validatedData,
+            },
+          },
+        },
+      });
+    
+      return redirect("/");
+    }
+export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
+  const user = await requireUser();
+
+  // Access the request object so Arcjet can analyze it
+  const req = await request();
+  // Call Arcjet protect
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    throw new Error("Forbidden");
+  }
+
+  const validatedData = jobSeekerSchema.parse(data);
+
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      onboardingCompleted: true,
+      userType: "JOB_SEEKER",
+      JobSeeker: {
+        create: {
+          ...validatedData,
+        },
+      },
+    },
+  });
+
+  return redirect("/");
+}
+
+
+  export async function createJob(data: z.infer<typeof jobSchema>) {
+  const user = await requireUser();
 
   const validatedData = jobSchema.parse(data);
 
@@ -155,7 +113,7 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
   });
 
   if (!company?.id) {
-    redirect("/");
+    return redirect("/");
   }
 
   let stripeCustomerId = company.user.stripeCustomerId;
@@ -187,6 +145,16 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
         benefits: validatedData.benefits,
       },
     });
+
+    
+  // Trigger the job expiration function
+  await inngest.send({
+    name: "job/created",
+    data: {
+      jobId: jobPost.id,
+      expirationDays: validatedData.listingDuration,
+    },
+  });
 
   // Get price from pricing tiers based on duration
   const pricingTier = jobListingDurationPricing.find(
@@ -224,4 +192,51 @@ export async function createJob(data: z.infer<typeof jobSchema>) {
   });
 
    return redirect(session.url as string);
+}
+
+export async function saveJobPost(jobId: string) {
+  const user = await requireUser();
+
+    // Access the request object so Arcjet can analyze it
+  const req = await request();
+  // Call Arcjet protect
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    throw new Error("Forbidden");
+  }
+
+  await prisma.savedJobPost.create({
+    data: {
+      jobId: jobId,
+      userId: user.id as string,
+    },
+  });
+
+  revalidatePath(`/job/${jobId}`);
+}
+
+export async function unsaveJobPost(savedJobPostId: string) {
+  const user = await requireUser();
+
+    // Access the request object so Arcjet can analyze it
+  const req = await request();
+  // Call Arcjet protect
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    throw new Error("Forbidden");
+  }
+
+  const data = await prisma.savedJobPost.delete({
+    where: {
+      id: savedJobPostId,
+      userId: user.id as string,
+    },
+    select: {
+      jobId: true,
+    },
+  });
+
+  revalidatePath(`/job/${data.jobId}`);
 }

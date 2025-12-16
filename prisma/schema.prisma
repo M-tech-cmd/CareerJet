@@ -103,6 +103,8 @@ model JobPost {
   updatedAt       DateTime      @updatedAt
   companyId       String
   Company         Company       @relation(fields: [companyId], references: [id])
+  SavedJobPost    SavedJobPost[]
+  applications    Int           @default(0)
 }
 
 enum UserType {
@@ -114,4 +116,18 @@ enum JobPostStatus {
   DRAFT
   ACTIVE
   EXPIRED
+}
+
+
+model SavedJobPost {
+  id     String @id @default(uuid())
+  jobId  String
+  userId String
+
+  job  JobPost @relation(fields: [jobId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, jobId])
 }
