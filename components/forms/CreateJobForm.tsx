@@ -32,6 +32,8 @@ import Image from "next/image";
 import { createJob } from "@/app/action";
 import { SalaryRangeSelector } from "../general/SalaryRangeSelector";
 import JobDescriptionEditor from "../TextEditor/JobDescriptionEditor";
+import BenefitsSelector from "../general/BenefitsSelector";
+import { JobListingDurationSelector } from "../general/JobListingDurationSelector";
 interface CreateJobFormProps {
   companyName: string;
   companyLocation: string;
@@ -211,10 +213,11 @@ export function CreateJobForm({
             <FormField
               control={form.control}
               name="benefits"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormLabel>Benefits</FormLabel>
                   <FormControl>
+                    <BenefitsSelector field={field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -408,9 +411,10 @@ export function CreateJobForm({
             <FormField
               control={form.control}
               name="listingDuration"
-              render={() => (
+              render={({ field }) => (
                 <FormItem>
                   <FormControl>
+                    <JobListingDurationSelector field={field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
