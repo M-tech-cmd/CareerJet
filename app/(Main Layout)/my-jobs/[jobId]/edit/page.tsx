@@ -1,5 +1,5 @@
-import { prisma } from "@/app/utils/db";
 import { requireUser } from "@/app/utils/hooks";
+import { prisma } from "@/app/utils/prisma";
 import { EditJobForm } from "@/components/forms/EditJobForm";
 
 import { notFound } from "next/navigation";
@@ -15,7 +15,7 @@ async function getJobPost({
   const jobPost = await prisma.jobPost.findUnique({
     where: {
       id: jobId,
-      company: {
+      Company: {
         userId: userId,
       },
     },
@@ -29,7 +29,7 @@ async function getJobPost({
       location: true,
       employmentType: true,
       listingDuration: true,
-      company: {
+      Company: {
         select: {
           about: true,
           name: true,

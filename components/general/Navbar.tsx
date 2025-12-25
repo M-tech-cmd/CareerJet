@@ -3,7 +3,7 @@ import Link from "next/link"
 import Logo from "@/public/logo.png";
 import { Button, buttonVariants } from "../ui/button";
 import { ThemeToggle } from "./ThemeToggle";
-import { auth, signOut } from "@/app/utils/auth";
+import { auth } from "@/app/utils/auth";
 import { UserDropdown } from "./UserDropdown";
 import { Menu } from "lucide-react";
 import {
@@ -68,7 +68,7 @@ export async function Navbar() {
                         <SheetContent>
                             <SheetHeader className="text-left">
                                 <SheetTitle>
-                                    Career<span className="text-primary">Jet</span>
+                                    Top<span className="text-primary">Talents</span>
                                 </SheetTitle>
                                 <SheetDescription>
                                     Find or post your next job opportunity

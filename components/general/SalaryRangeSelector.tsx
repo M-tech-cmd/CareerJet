@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
 
 import { Control, useController } from "react-hook-form";

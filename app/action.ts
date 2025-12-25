@@ -194,6 +194,67 @@ export async function createJobSeeker(data: z.infer<typeof jobSeekerSchema>) {
    return redirect(session.url as string);
 }
 
+export async function updateJobPost(
+  data: z.infer<typeof jobSchema>,
+  jobId: string
+) {
+  const user = await requireUser();
+
+  const validatedData = jobSchema.parse(data);
+
+  await prisma.jobPost.update({
+    where: {
+      id: jobId,
+      Company: {
+        userId: user.id,
+      },
+    },
+    data: {
+      jobDescription: validatedData.jobDescription,
+      jobTitle: validatedData.jobTitle,
+      employmentType: validatedData.employmentType,
+      location: validatedData.location,
+      salaryFrom: validatedData.salaryFrom,
+      salaryTo: validatedData.salaryTo,
+      listingDuration: validatedData.listingDuration,
+      benefits: validatedData.benefits,
+    },
+  });
+
+  return redirect("/my-jobs");
+}
+
+export async function deleteJobPost(jobId: string) {
+  const user = await requireUser();
+
+   // Access the request object so Arcjet can analyze it
+    const req = await request();
+    // Call Arcjet protect
+    const decision = await aj.protect(req);
+  
+    if (decision.isDenied()) {
+      throw new Error("Forbidden");
+    }
+
+  await prisma.jobPost.delete({
+    where: {
+      id: jobId,
+      Company: {
+        userId: user.id,
+      },
+    },
+  });
+
+  // Cancel pending expiration workflow for this job
+  await inngest.send({
+    name: "job/cancel.expiration",
+    data: { jobId: jobId },
+  });
+
+  return redirect("/my-jobs");
+}
+
+
 export async function saveJobPost(jobId: string) {
   const user = await requireUser();
 
@@ -214,6 +275,42 @@ export async function saveJobPost(jobId: string) {
   });
 
   revalidatePath(`/job/${jobId}`);
+}
+
+export async function editJobPost(data: z.infer<typeof jobSchema>, jobId: string) {
+  const user = await requireUser();
+
+    // Access the request object so Arcjet can analyze it
+  const req = await request();
+  // Call Arcjet protect
+  const decision = await aj.protect(req);
+
+  if (decision.isDenied()) {
+    throw new Error("Forbidden");
+  }
+
+  const validatedData = jobSchema.parse(data);
+
+  await prisma.jobPost.update({
+    where: {
+      id: jobId,
+      Company: {
+        userId: user.id,
+      },
+    },
+    data: {
+      jobDescription: validatedData.jobDescription,
+      jobTitle: validatedData.jobTitle,
+      employmentType: validatedData.employmentType,
+      location: validatedData.location,
+      salaryFrom: validatedData.salaryFrom,
+      salaryTo: validatedData.salaryTo,
+      listingDuration: validatedData.listingDuration,
+      benefits: validatedData.benefits,
+    },
+  });
+
+  return redirect("/my-jobs");
 }
 
 export async function unsaveJobPost(savedJobPostId: string) {

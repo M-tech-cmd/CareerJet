@@ -72,7 +72,10 @@ async function getCompany(userId: string) {
 }
 export default async function PostJob() {
   const session = await auth();
-  const data = await getCompany(session?.user?.id!);
+  if (!session?.user?.id) {
+    redirect("/");
+  }
+  const data = await getCompany(session.user.id);
   return (
     <div className="grid grid-cols-1  lg:grid-cols-3 gap-4 mt-5">
       <CreateJobForm
@@ -121,7 +124,7 @@ export default async function PostJob() {
                   className="border-l-2 border-primary pl-4"
                 >
                   <p className="text-sm italic text-muted-foreground">
-                    "{testimonial.quote}"
+                    &ldquo;{testimonial.quote}&rdquo;
                   </p>
                   <footer className="mt-2 text-sm font-medium">
                     - {testimonial.author}, {testimonial.company}

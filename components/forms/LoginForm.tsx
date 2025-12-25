@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui
 
 import * as React from "react";
 import type { SVGProps } from "react";
-import { GeneralSubmitButtons } from "../general/SubmitButtons";
+import { GeneralSubmitButtons } from "../general/SubmitButtons"
 import { redirect } from "next/navigation";
 
 const GitHub = (props: SVGProps<SVGSVGElement>) => (
@@ -262,7 +262,6 @@ const Google = (props: SVGProps<SVGSVGElement>) => (
         </g>
     </svg>
 );
-
 
 
 export async function LoginForm() {

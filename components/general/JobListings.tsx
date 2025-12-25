@@ -1,8 +1,8 @@
-import { prisma } from "@/app/utils/prisma";
-import { JobCard } from "./JobCard";
-import { PaginationComponent } from "./PaginationComponent";
 import { EmptyState } from "./EmptyState";
+import { PaginationComponent } from "./PaginationComponent";
+import { JobCard } from "./JobCard";
 import { JobPostStatus } from "@prisma/client";
+import { prisma } from "@/app/utils/prisma";
 
 async function getJobs(
   page: number = 1,
@@ -13,7 +13,9 @@ async function getJobs(
   const skip = (page - 1) * pageSize;
 
   const where = {
-    status: JobPostStatus.ACTIVE,
+    ...(process.env.NODE_ENV === "development" || process.env.NEXT_PUBLIC_SHOW_DRAFTS === "true"
+      ? { status: { in: [JobPostStatus.ACTIVE, JobPostStatus.DRAFT] } }
+      : { status: JobPostStatus.ACTIVE }),
     ...(jobTypes.length > 0 && {
       employmentType: {
         in: jobTypes,
@@ -58,7 +60,7 @@ async function getJobs(
     jobs: data,
     totalPages: Math.ceil(totalCount / pageSize),
     currentPage: page,
-  };
+  }; 
 }
 
 export default async function JobListings({

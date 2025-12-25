@@ -4,7 +4,7 @@ import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 import { Heart, Loader2 } from "lucide-react";
 
-export function GeneralSubmitButton({
+export function GeneralSubmitButtons({
   text,
   icon,
   variant,
