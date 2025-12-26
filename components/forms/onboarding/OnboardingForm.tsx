@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
-import Logo from "@/public/logo.png";
+import Logo from "@/public/";
 import { UserTypeSelection } from "./UserTypeForm";
 import CompanyForm from "./CompanyForm";
 import { JobSeekerForm } from "./JobSeekerForm";

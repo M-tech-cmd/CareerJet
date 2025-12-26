@@ -6,8 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React from "react";
-import ArcJetLogo from "@/public/arcjet.jpg";
-import InngestLogo from "@/public/inngest-locale.png";
+import JCBLogo from "@/public/jcb.png";
+import FirefoxLogo from "@/public/firefox.png";
+
+import BlackcoinLogo from "@/public/blackcoin.png";
+import ScriptAppLogo from "@/public/script-app.png";
+import SlackLogo from "@/public/slack.png";
+import UpsLogo from "@/public/ups.png";
 import Image from "next/image";
 import { prisma } from "@/app/utils/prisma";
 import { redirect } from "next/navigation";
@@ -15,32 +20,50 @@ import { auth } from "@/app/utils/auth";
 import { CreateJobForm } from "@/components/forms/CreateJobForm";
 
 const companies = [
-  { id: 0, name: "ArcJet", logo: ArcJetLogo },
-  { id: 1, name: "Inngest", logo: InngestLogo },
-  { id: 2, name: "ArcJet", logo: ArcJetLogo },
-  { id: 3, name: "Inngest", logo: InngestLogo },
-  { id: 4, name: "ArcJet", logo: ArcJetLogo },
-  { id: 5, name: "Inngest", logo: InngestLogo },
+  { id: 0, name: "JCB ", logo: JCBLogo },
+  { id: 1, name: "Firefo", logo: FirefoxLogo },
+  { id: 2, name: "Blackcoin", logo: BlackcoinLogo },
+  { id: 3, name: "ScriptApp", logo: ScriptAppLogo },
+  { id: 4, name: "Slack", logo: SlackLogo },
+  { id: 5, name: "Ups", logo: UpsLogo },
 ];
 
 const testimonials = [
   {
     quote:
       "We found our ideal candidate within 48 hours of posting. The quality of applicants was exceptional!",
-    author: "Sarah Chen",
-    company: "TechCorp",
+    author: "Manuel Kim",
+    company: "JCB",
   },
   {
     quote:
-      "The platform made hiring remote talent incredibly simple. Highly recommended!",
-    author: "Mark Johnson",
-    company: "StartupX",
+      "Hiring remote talent has never been easier. Highly recommended!",
+    author: "Mark dailo",
+    company: "Firefox",
   },
   {
     quote:
-      "We've consistently found high-quality candidates here. It's our go-to platform for all our hiring needs.",
-    author: "Emily Rodriguez",
-    company: "InnovateNow",
+      "Our developer pipeline tripled after posting here — highly efficient and targeted.",
+    author: "Aisha Patel",
+    company: "Blackcoin",
+  },
+  {
+    quote:
+      "Fast, reliable responses from qualified candidates — a must-use.",
+    author: "Daniel Kamau",
+    company: "ScriptApp",
+  },
+  {
+    quote:
+      "Excellent platform for collaborative teams; we found great designers quickly.",
+    author: "Priya Singh",
+    company: "Slack",
+  },
+  {
+    quote:
+      "Consistently high-quality candidates and seamless hiring.",
+    author: "Michael Liam",
+    company: "UPS",
   },
 ];
 

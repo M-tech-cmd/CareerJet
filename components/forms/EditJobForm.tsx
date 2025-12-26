@@ -1,6 +1,6 @@
 "use client";
 
-import { countryList } from "@/app/utils/countriesList";
+import { countryList, getFlagEmoji } from "@/app/utils/countriesList";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   Form,
@@ -163,14 +163,23 @@ export function EditJobForm({ jobPost }: iAppProps) {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Location" />
+                          <SelectValue>
+                            {field.value ? (
+                              <>
+                                <span className="text-xl leading-none min-w-[1.25rem]">{getFlagEmoji(field.value)}</span>
+                                <span className="pl-2">{field.value}</span>
+                              </>
+                            ) : (
+                              <span>Select Location</span>
+                            )}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Worldwide</SelectLabel>
                           <SelectItem value="worldwide">
-                            <span>🌍</span>
+                            <span className="text-xl leading-none min-w-[1.25rem]">🌍</span>
                             <span className="pl-2">Worldwide / Remote</span>
                           </SelectItem>
                         </SelectGroup>
@@ -178,12 +187,12 @@ export function EditJobForm({ jobPost }: iAppProps) {
                           <SelectLabel>Location</SelectLabel>
                           {countryList.map((country) => (
                             <SelectItem value={country.name} key={country.code}>
-                              <span>{country.flagEmoji}</span>
+                              <span className="text-xl leading-none min-w-[1.25rem]">{country.flagEmoji}</span>
                               <span className="pl-2">{country.name}</span>
                             </SelectItem>
                           ))}
                         </SelectGroup>
-                      </SelectContent>
+                      </SelectContent> 
                     </Select>
 
                     <FormMessage />
@@ -269,14 +278,23 @@ export function EditJobForm({ jobPost }: iAppProps) {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Location" />
+                          <SelectValue>
+                            {field.value ? (
+                              <>
+                                <span className="text-xl leading-none min-w-[1.25rem]">{getFlagEmoji(field.value)}</span>
+                                <span className="pl-2">{field.value}</span>
+                              </>
+                            ) : (
+                              <span>Select Location</span>
+                            )}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Worldwide</SelectLabel>
                           <SelectItem value="worldwide">
-                            <span>🌍</span>
+                            <span className="text-xl leading-none min-w-[1.25rem]">🌍</span>
                             <span className="pl-2">Worldwide</span>
                           </SelectItem>
                         </SelectGroup>
@@ -284,7 +302,7 @@ export function EditJobForm({ jobPost }: iAppProps) {
                           <SelectLabel>Location</SelectLabel>
                           {countryList.map((country) => (
                             <SelectItem value={country.name} key={country.name}>
-                              <span>{country.flagEmoji}</span>
+                              <span className="text-xl leading-none min-w-[1.25rem]">{country.flagEmoji}</span>
                               <span className="pl-2">{country.name}</span>
                             </SelectItem>
                           ))}

@@ -1,6 +1,6 @@
 "use client";
 import { createCompany } from '@/app/action';
-import { countryList } from '@/app/utils/countriesList';
+import { countryList, getFlagEmoji } from '@/app/utils/countriesList';
 import { companySchema } from '@/app/utils/zodSchemas';
 import { UploadDropzone } from '@/components/general/UploadThingReExport';
 import { Button } from '@/components/ui/button';
@@ -71,21 +71,30 @@ export function CompanyForm() {
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a location" />
+                      <SelectValue>
+                        {field.value ? (
+                          <>
+                            <span className="text-xl leading-none min-w-[1.25rem]">{getFlagEmoji(field.value)}</span>
+                            <span className="pl-2">{field.value}</span>
+                          </>
+                        ) : (
+                          <span>Select a location</span>
+                        )}
+                      </SelectValue>
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Wroldwide</SelectLabel>
                       <SelectItem value="worldwide">
-                        <span>Wroldwide/Remote</span>
+                        <span className="text-xl leading-none min-w-[1.25rem]">Wroldwide/Remote</span>
                       </SelectItem>
                     </SelectGroup>
                     <SelectGroup>
                       <SelectLabel>Location</SelectLabel>
                       {countryList.map((country) => (
                         <SelectItem key={country.code} value={country.name}>
-                           <span>{country.flagEmoji}</span> 
+                           <span className="text-xl leading-none min-w-[1.25rem]">{country.flagEmoji}</span> 
                           <span className='pl-2'>{country.name}</span> 
                         </SelectItem>
                       ))}

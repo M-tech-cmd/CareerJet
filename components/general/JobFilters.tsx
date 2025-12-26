@@ -19,7 +19,7 @@ import {
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 import { Checkbox } from "../ui/checkbox";
-import { countryList } from "@/app/utils/countriesList";
+import { countryList, getFlagEmoji } from "@/app/utils/countriesList";
 import { Separator } from "../ui/separator";
 import { Input } from "@/components/ui/input";
 
@@ -123,13 +123,22 @@ export function JobFilters() {
           <Label className="text-lg font-semibold">Location</Label>
           <Select value={currentLocation} onValueChange={handleLocationChange}>
             <SelectTrigger>
-              <SelectValue placeholder="Select Location" />
+              <SelectValue>
+                {currentLocation ? (
+                  <>
+                    <span className="text-xl leading-none min-w-[1.25rem]">{getFlagEmoji(currentLocation)}</span>
+                    <span className="pl-2">{currentLocation}</span>
+                  </>
+                ) : (
+                  <span>Select Location</span>
+                )}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Worldwide</SelectLabel>
                 <SelectItem value="worldwide">
-                  <span>🌍</span>
+                  <span className="text-xl leading-none min-w-[1.25rem]">🌍</span>
                   <span className="pl-2">Worldwide / Remote</span>
                 </SelectItem>
               </SelectGroup>
@@ -137,7 +146,7 @@ export function JobFilters() {
                 <SelectLabel>Location</SelectLabel>
                 {countryList.map((country) => (
                   <SelectItem value={country.name} key={country.name}>
-                    <span>{country.flagEmoji}</span>
+                    <span className="text-xl leading-none min-w-[1.25rem]">{country.flagEmoji}</span>
                     <span className="pl-2">{country.name}</span>
                   </SelectItem>
                 ))}

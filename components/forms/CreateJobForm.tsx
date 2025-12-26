@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { countryList } from "@/app/utils/countriesList";
+import { countryList, getFlagEmoji } from "@/app/utils/countriesList";
 import { Textarea } from "../ui/textarea";
 import { UploadDropzone } from "../general/UploadThingReExport";
 import { XIcon } from "lucide-react";
@@ -154,14 +154,23 @@ export function CreateJobForm({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Location" />
+                          <SelectValue>
+                            {field.value ? (
+                              <>
+                                <span className="text-xl leading-none min-w-[1.25rem]">{getFlagEmoji(field.value)}</span>
+                                <span className="pl-2">{field.value}</span>
+                              </>
+                            ) : (
+                              <span>Select Location</span>
+                            )}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Worldwide</SelectLabel>
                           <SelectItem value="worldwide">
-                            <span>🌍</span>
+                            <span className="text-xl leading-none min-w-[1.25rem]">🌍</span>
                             <span className="pl-2">Worldwide / Remote</span>
                           </SelectItem>
                         </SelectGroup>
@@ -169,7 +178,7 @@ export function CreateJobForm({
                           <SelectLabel>Location</SelectLabel>
                           {countryList.map((country) => (
                             <SelectItem value={country.name} key={country.code}>
-                              <span>{country.flagEmoji}</span>
+                              <span className="text-xl leading-none min-w-[1.25rem]">{country.flagEmoji}</span>
                               <span className="pl-2">{country.name}</span>
                             </SelectItem>
                           ))}
@@ -260,14 +269,23 @@ export function CreateJobForm({
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Location" />
+                          <SelectValue>
+                            {field.value ? (
+                              <>
+                                <span className="text-xl leading-none min-w-[1.25rem]">{getFlagEmoji(field.value)}</span>
+                                <span className="pl-2">{field.value}</span>
+                              </>
+                            ) : (
+                              <span>Select Location</span>
+                            )}
+                          </SelectValue>
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Worldwide</SelectLabel>
                           <SelectItem value="worldwide">
-                            <span>🌍</span>
+                            <span className="text-xl leading-none min-w-[1.25rem]">🌍</span>
                             <span className="pl-2">Worldwide</span>
                           </SelectItem>
                         </SelectGroup>
@@ -275,7 +293,7 @@ export function CreateJobForm({
                           <SelectLabel>Location</SelectLabel>
                           {countryList.map((country) => (
                             <SelectItem value={country.name} key={country.name}>
-                              <span>{country.flagEmoji}</span>
+                              <span className="text-xl leading-none min-w-[1.25rem]">{country.flagEmoji}</span>
                               <span className="pl-2">{country.name}</span>
                             </SelectItem>
                           ))}
