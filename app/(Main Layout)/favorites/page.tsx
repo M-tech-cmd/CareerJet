@@ -35,6 +35,8 @@ async function getFavorites(userId: string) {
   return data;
 }
 
+type Favorite = Awaited<ReturnType<typeof getFavorites>>[number];
+
 const FavoritesPage = async () => {
   const session = await requireUser();
   const favorites = await getFavorites(session.id as string);
@@ -52,7 +54,7 @@ const FavoritesPage = async () => {
 
   return (
     <div className="grid grid-cols-1 mt-5   gap-4">
-      {favorites.map((favorite) => (
+      {favorites.map((favorite: Favorite) => (
         <JobCard job={favorite.job} key={favorite.job.id} />
       ))}
     </div>
