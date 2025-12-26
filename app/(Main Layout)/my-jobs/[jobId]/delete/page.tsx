@@ -1,5 +1,5 @@
 import { deleteJobPost } from "@/app/action";
-import { GeneralSubmitButton } from "@/components/general/SubmitButtons";
+import { GeneralSubmitButtons } from "@/components/general/SubmitButtons";
 
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -41,7 +41,7 @@ const DeleteJobPage = async ({ params }: { params: Params }) => {
             await deleteJobPost(jobId);
           }}
         >
-          <GeneralSubmitButton
+          <GeneralSubmitButtons
             text="Delete Job"
             variant="destructive"
             icon={<Trash2Icon className="size-4" />}

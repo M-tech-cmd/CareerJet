@@ -6,8 +6,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import React from "react";
-import ArcJetLogo from "@/public/arcjet.jpg";
-import InngestLogo from "@/public/";
+import JCBLogo from "@/public/jcb.png";
+import FirefoxLogo from "@/public/firefox.png";
+import BlackcoinLogo from "@/public/blackcoin.png";
+import ScriptAppLogo from "@/public/script-app.png";
+import SlackLogo from "@/public/slack.png";
+import UpsLogo from "@/public/ups.png";
 import Image from "next/image";
 import { CreateJobForm } from "@/components/forms/CreateJobForm";
 import { prisma } from "@/app/utils/prisma";
@@ -15,12 +19,12 @@ import { redirect } from "next/navigation";
 import { auth } from "@/app/utils/auth";
 
 const companies = [
-  { id: 0, name: "ArcJet", logo: ArcJetLogo },
-  { id: 1, name: "Inngest", logo: InngestLogo },
-  { id: 2, name: "ArcJet", logo: ArcJetLogo },
-  { id: 3, name: "Inngest", logo: InngestLogo },
-  { id: 4, name: "ArcJet", logo: ArcJetLogo },
-  { id: 5, name: "Inngest", logo: InngestLogo },
+  { id: 0, name: "JCB ", logo: JCBLogo },
+  { id: 1, name: "Firefox", logo: FirefoxLogo },
+  { id: 2, name: "Blackcoin", logo: BlackcoinLogo },
+  { id: 3, name: "ScriptApp", logo: ScriptAppLogo },
+  { id: 4, name: "Slack", logo: SlackLogo },
+  { id: 5, name: "Ups", logo: UpsLogo },
 ];
 
 const testimonials = [

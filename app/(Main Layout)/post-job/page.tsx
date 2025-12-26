@@ -8,7 +8,6 @@ import {
 import React from "react";
 import JCBLogo from "@/public/jcb.png";
 import FirefoxLogo from "@/public/firefox.png";
-
 import BlackcoinLogo from "@/public/blackcoin.png";
 import ScriptAppLogo from "@/public/script-app.png";
 import SlackLogo from "@/public/slack.png";
@@ -21,7 +20,7 @@ import { CreateJobForm } from "@/components/forms/CreateJobForm";
 
 const companies = [
   { id: 0, name: "JCB ", logo: JCBLogo },
-  { id: 1, name: "Firefo", logo: FirefoxLogo },
+  { id: 1, name: "Firefox", logo: FirefoxLogo },
   { id: 2, name: "Blackcoin", logo: BlackcoinLogo },
   { id: 3, name: "ScriptApp", logo: ScriptAppLogo },
   { id: 4, name: "Slack", logo: SlackLogo },

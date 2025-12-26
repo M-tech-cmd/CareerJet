@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Building2, UserRound } from "lucide-react";
 
-type UserSelectionType = "Company" | "JobSeeker" | null;
+type UserSelectionType = "company" | "jobseeker" | null;
 
 interface UserTypeSelectionProps {
     onSelect: (type: UserSelectionType) => void;

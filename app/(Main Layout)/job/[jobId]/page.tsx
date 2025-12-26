@@ -9,7 +9,7 @@ import { Heart } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/app/utils/auth";
 import {
-  GeneralSubmitButton,
+  GeneralSubmitButtons,
   SaveJobButton,
 } from "@/components/general/SubmitButtons";
 import { getFlagEmoji } from "@/app/utils/countriesList";
@@ -214,7 +214,7 @@ const JobIdPage = async ({ params }: { params: Params }) => {
               </div>
               <form>
                 <input type="hidden" name="jobId" value={jobId} />
-                <GeneralSubmitButton text="Apply now" />
+                <GeneralSubmitButtons text="Apply now" />
               </form>
             </div>
           </Card>
